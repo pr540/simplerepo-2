@@ -30,7 +30,7 @@ jobs:
       # Step 4: Build and push Docker image to Docker Hub
       - name: Build and Push Docker Image
         run: |
-          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/pharmetrade1:1.0
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/pharmetrade:1.0
           echo "Pushing image to $IMAGE_NAME"
           
           docker buildx build \

@@ -35,6 +35,6 @@ jobs:
           
           docker buildx build \
             --platform linux/amd64 \
-            --file Dockerfile \
+            --file 2000030906/pharmetrade/Dockerfile \
             --tag $IMAGE_NAME \
             --push .

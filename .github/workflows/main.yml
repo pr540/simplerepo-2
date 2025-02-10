@@ -33,5 +33,5 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             --file Dockerfile \
-            --tag ${{ secrets.DOCKER_USERNAME }}/pharmetrade1:latest \
+            --tag ${{ secrets.DOCKER_USERNAME }}/DOCKER_HUB_IMAGE:1.1 \
             --push .

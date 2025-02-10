@@ -3,7 +3,7 @@ name: Build and Push Docker Image on Commit
 on:
   push:
     branches:
-      - main  # Change this to the branch that should trigger the action
+      - main  # Change this if you want to trigger on another branch
 
 jobs:
   build-and-push:
@@ -27,4 +27,14 @@ jobs:
         with:
           driver: docker-container
 
-     
+      # Step 4: Build and push Docker image to Docker Hub
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/pharmetrade1:1.0
+          echo "Pushing image to $IMAGE_NAME"
+          
+          docker buildx build \
+            --platform linux/amd64 \
+            --file Pharmetrade1/Dockerfile \
+            --tag $IMAGE_NAME \
+            --push .

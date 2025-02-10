@@ -27,11 +27,4 @@ jobs:
         with:
           driver: docker-container
 
-      # Step 4: Build and push Docker image
-      - name: Build and Push Docker Image
-        run: |
-          docker buildx build \
-            --platform linux/amd64 \
-            --file Dockerfile \
-            --tag ${{ secrets.DOCKER_USERNAME }}/pharmetrade1:1.1 \
-            --push .
+     

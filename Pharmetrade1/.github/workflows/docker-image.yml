@@ -1,0 +1,57 @@
+name: Push DockerHub Image to AWS ECR
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main  # Change branch if needed
+
+jobs:
+  push_to_ecr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+
+      - name: Pull DockerHub Image
+        run: |
+          docker pull ${{ secrets.DOCKERHUB_IMAGE }}
+
+      - name: Tag Image for ECR
+        run: |
+          IMAGE_NAME=$(echo "${{ secrets.DOCKERHUB_IMAGE }}" | cut -d':' -f1 | cut -d'/' -f2)
+          docker tag ${{ secrets.DOCKERHUB_IMAGE }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:$IMAGE_NAME-latest
+
+      - name: Push Image to ECR
+        run: |
+          IMAGE_NAME=$(echo "${{ secrets.DOCKERHUB_IMAGE }}" | cut -d':' -f1 | cut -d'/' -f2)
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:$IMAGE_NAME-latest
+
+  notify:
+    needs: push_to_ecr
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Email using Gmail SMTP
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_PASSWORD }}
+          subject: "GitHub Actions: Docker Image Pushed to AWS ECR"
+          body: "The Docker image has been successfully pushed to AWS ECR."
+          to: "praneethssr.2002@gmail.com"
+          from: ${{ secrets.GMAIL_USERNAME }}

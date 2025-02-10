@@ -1,0 +1,102 @@
+body {
+  overflow-x: hidden;
+}
+
+@keyframes bounce-in-top {
+    0% {
+      transform: translateY(-500px);
+      animation-timing-function: ease-in;
+      opacity: 0;
+    }
+    38% {
+      transform: translateY(0);
+      animation-timing-function: ease-out;
+      opacity: 1;
+    }
+    55% {
+      transform: translateY(-65px);
+      animation-timing-function: ease-in;
+    }
+    72% {
+      transform: translateY(0);
+      animation-timing-function: ease-out;
+    }
+    81% {
+      transform: translateY(-28px);
+      animation-timing-function: ease-in;
+    }
+    90% {
+      transform: translateY(0);
+      animation-timing-function: ease-out;
+    }
+    95% {
+      transform: translateY(-8px);
+      animation-timing-function: ease-in;
+    }
+    100% {
+      transform: translateY(0);
+      animation-timing-function: ease-out;
+    }
+  }
+  
+  .bounce-in-top {
+    animation: bounce-in-top 1s  forwards;
+  }
+  @keyframes scroll-horizontal {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .scroll-container {
+    display: flex;
+    flex-direction: row;
+    overflow-x: hidden;
+    white-space: nowrap;
+    
+  }
+  
+  .scroll-item {
+    display: inline-block;
+    padding: 0 10px; /* Adjust as needed */
+    animation: scroll-horizontal 2s linear infinite;
+  }
+  @keyframes backgroundChange {
+    0% {
+      background-image: url('../src/assets/Frame 7.png');
+    }
+    33% {
+      background-image: url('../src/assets/Frame 8.png');
+    }
+    66% {
+      background-image: url('../src/assets/Frame 9.png');
+    }
+    100% {
+      background-image: url('../src/assets/Frame 7.png');
+    }
+    /* 66% {
+      background-image: url('/images/background3.jpg');
+    }
+    100% {
+      background-image: url('/images/background1.jpg');
+    } */
+  }
+  
+  .background-animation {
+    animation: backgroundChange 10s infinite;
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+    width: 100%;
+    height: 60vh; /* Adjust the height as needed */
+  }
+
+
+  
+
+  .getTouchs{
+    background-image: url(../src/assets/h1-slider01.jpeg);
+  }

@@ -1,9 +1,9 @@
-name: Build and Push Docker Image on Commit
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
-      - main  # Change this to the branch you want to trigger the action
+      - main  # Change this if needed
 
 jobs:
   build-and-push:
@@ -14,29 +14,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Verify that the Dockerfile exists
+      # Step 2: Debug - List files in the repo
+      - name: List files in workspace
+        run: ls -al
+
+      # Step 3: Check if Dockerfile exists
       - name: Check for Dockerfile
         run: |
-          if [ ! -f Dockerfile ]; then
-            echo "Error: Dockerfile not found!"
-            exit 1
-          fi
-          ls -al  # List files to confirm the structure
+          test -f Dockerfile
 
-      # Step 3: Log in to Docker Hub
+      # Step 4: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 4: Set up Docker Buildx
+      # Step 5: Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step 5: Build and push the Docker image
+      # Step 6: Build and push the Docker image
       - name: Build and push Docker image
         run: |
-          docker buildx build --platform linux/amd64 \
+          docker buildx build \
+            --platform linux/amd64 \
             -t ${{ secrets.DOCKER_USERNAME }}/pharmetrade:1.0 \
-            -f Dockerfile . --push
+            -f Dockerfile . \
+            --push

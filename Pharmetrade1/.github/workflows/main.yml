@@ -14,14 +14,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Debug - List files in the repo
+      # Step 2: Debug - List files in the repo to confirm Dockerfile exists
       - name: List files in workspace
         run: ls -al
 
-      # Step 3: Check if Dockerfile exists
-      - name: Check for Dockerfile
+      # Step 3: Verify Dockerfile exists and print its location
+      - name: Check Dockerfile in root
         run: |
-          test -f Dockerfile
+          if [ -f ./Dockerfile ]; then
+            echo "Dockerfile found in root directory."
+          else
+            echo "Dockerfile NOT found in root directory!"
+          fi
+
+      - name: Check Dockerfile in docker/ directory
+        run: |
+          if [ -f ./docker/Dockerfile ]; then
+            echo "Dockerfile found in docker/ directory."
+          else
+            echo "Dockerfile NOT found in docker/ directory!"
+            exit 1
+          fi
 
       # Step 4: Log in to Docker Hub
       - name: Log in to Docker Hub
@@ -40,5 +53,5 @@ jobs:
           docker buildx build \
             --platform linux/amd64 \
             -t ${{ secrets.DOCKER_USERNAME }}/pharmetrade:1.0 \
-            -f Dockerfile . \
+            -f ./docker/Dockerfile ./docker \
             --push

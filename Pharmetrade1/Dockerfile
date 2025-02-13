@@ -46,4 +46,4 @@ COPY --from=build /app/dist ./dist
 EXPOSE 5173
 
 # Command to serve the files
-CMD ["serve", "-s", "dist", "-l", "5173"]
+CMD ["serve", "-s", "dist", "-l", "5173"] 
